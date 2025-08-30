@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantilla de Análisis: Auditoría de Tarea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Librería para generar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        textarea {
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        textarea:focus {
+            border-color: #0d9488; /* Teal-600 */
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+            outline: none;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="content-to-export" class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-teal-800">Ejercicio de Análisis: "Auditoría de una Tarea"</h1>
+            <p class="text-md md:text-lg text-gray-600 mt-2">Completa la plantilla basándote en las 5 dimensiones de Gulikers.</p>
+        </header>
+
+        <!-- Task Description -->
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-blue-200 mb-8">
+            <h2 class="text-xl font-bold text-blue-800 mb-4">Tarea a Analizar: "Ensayo Final para Sociología del Arte"</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Al final del semestre, los estudiantes deben entregar un ensayo de 2,500 palabras. Deben elegir una de
+                tres preguntas predefinidas por el profesor. El ensayo debe analizar una obra de arte específica utilizando
+                dos de las teorías sociológicas vistas en clase. Se espera que los estudiantes utilicen un mínimo de 8
+                fuentes académicas de la bibliografía del curso. El trabajo es individual, se entrega en formato PDF a
+                través de la plataforma virtual y es calificado por el profesor, quien devuelve una nota numérica y un
+                párrafo de comentarios generales.
+            </p>
+        </div>
+
+        <!-- Analysis Template -->
+        <div class="bg-white p-6 rounded-2xl shadow-lg space-y-6">
+            <h2 class="text-2xl font-bold text-center mb-4">Tu Análisis de las 5 Dimensiones</h2>
+
+            <!-- Dimension 1: La Tarea -->
+            <div>
+                <label for="dim1-task" class="text-lg font-semibold text-gray-800 block mb-2">1. Dimensión: La Tarea</label>
+                <textarea id="dim1-task" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Analiza aquí si la tarea es compleja, poco estructurada, si integra conocimientos, etc."></textarea>
+            </div>
+
+            <!-- Dimension 2: Contexto Físico -->
+            <div>
+                <label for="dim2-physical" class="text-lg font-semibold text-gray-800 block mb-2">2. Dimensión: El Contexto Físico</label>
+                <textarea id="dim2-physical" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Analiza el entorno, herramientas y recursos. ¿Son de alta o baja fidelidad con la realidad profesional?"></textarea>
+            </div>
+
+            <!-- Dimension 3: Contexto Social -->
+            <div>
+                <label for="dim3-social" class="text-lg font-semibold text-gray-800 block mb-2">3. Dimensión: El Contexto Social</label>
+                <textarea id="dim3-social" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Analiza las interacciones humanas. ¿Es un trabajo individual, colaborativo, con un cliente?"></textarea>
+            </div>
+
+            <!-- Dimension 4: Forma del Producto -->
+            <div>
+                <label for="dim4-product" class="text-lg font-semibold text-gray-800 block mb-2">4. Dimensión: La Forma del Producto/Evidencia</label>
+                <textarea id="dim4-product" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Analiza el resultado final. ¿Es un artefacto académico o un producto con valor profesional?"></textarea>
+            </div>
+
+            <!-- Dimension 5: Criterios y Estándares -->
+            <div>
+                <label for="dim5-criteria" class="text-lg font-semibold text-gray-800 block mb-2">5. Dimensión: Los Criterios y Estándares</label>
+                <textarea id="dim5-criteria" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Analiza cómo se juzga la calidad. ¿Son los criterios transparentes, multidimensionales, públicos?"></textarea>
+            </div>
+        </div>
+        
+        <!-- Export Button -->
+        <div class="mt-8 text-center no-print">
+            <button id="export-pdf-button" class="bg-teal-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-teal-700 transition-colors shadow-md">
+                Exportar Análisis a PDF
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('export-pdf-button').addEventListener('click', () => {
+            const element = document.getElementById('content-to-export');
+            const filename = 'Analisis_Auditoria_de_Tarea.pdf';
+
+            // 1. Clonar el elemento para no modificar la vista del usuario
+            const elementToExport = element.cloneNode(true);
+
+            // 2. En el clon, reemplazar cada textarea con un div que contiene el texto
+            const textareas = element.querySelectorAll('textarea');
+            const clonedTextareas = elementToExport.querySelectorAll('textarea');
+
+            clonedTextareas.forEach((textarea, index) => {
+                const contentDiv = document.createElement('div');
+                const originalTextareaValue = textareas[index].value;
+
+                contentDiv.innerHTML = originalTextareaValue.replace(/\n/g, '<br>') || '<p class="text-gray-400 italic">[Sin respuesta]</p>';
+                contentDiv.className = 'w-full min-h-[8rem] p-3 border border-gray-200 rounded-md bg-gray-50';
+                
+                textarea.parentNode.replaceChild(contentDiv, textarea);
+            });
+
+            // 3. Ocultar el botón en el clon antes de exportar
+            elementToExport.querySelector('.no-print').style.display = 'none';
+            
+            // 4. Configurar opciones de exportación
+            const opt = {
+              margin:       0.5,
+              filename:     filename,
+              image:        { type: 'jpeg', quality: 0.98 },
+              html2canvas:  { scale: 2, useCORS: true },
+              jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+              pagebreak:    { mode: 'avoid-all' } // <-- Esta es la solución clave
+            };
+
+            // 5. Generar el PDF desde el elemento clonado y modificado
+            html2pdf().from(elementToExport).set(opt).save();
+        });
+    </script>
+</body>
+</html>
